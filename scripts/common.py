@@ -21,10 +21,15 @@ Conventions used by every selection script (Section 6 of the paper):
 from __future__ import annotations
 
 import re
+import warnings
 from itertools import combinations
 from pathlib import Path
 
-import colour
+# colour-science warns on import that matplotlib (which nothing here uses) is
+# not installed; scripts that import colour themselves import common first.
+warnings.filterwarnings("ignore", message='"Matplotlib" related API features')
+
+import colour  # noqa: E402
 import numpy as np
 from colour.difference import delta_E_CIE2000
 

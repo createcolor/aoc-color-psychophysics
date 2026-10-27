@@ -21,11 +21,12 @@ from __future__ import annotations
 
 import json
 
-import numpy as np
-from colour.difference import delta_E_CIE2000
-
+# common before colour: it silences colour's matplotlib warning
 from common import (BATCH, CAL, OUT, adapting_white, candidates, converter, labs_of,
                     load_observers, observer_matrices, parse_monitor_spectra, primaries_of)
+
+import numpy as np
+from colour.difference import delta_E_CIE2000
 
 AGE_SWEEP = list(range(20, 71, 5))
 TRAIN_GROUPS = {"standard", "age_model"}

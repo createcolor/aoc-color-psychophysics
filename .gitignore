@@ -1,0 +1,4 @@
+__pycache__/
+output/
+# downloaded on the first run
+data/asano2015_color_normal_observers_XYZ10.npz

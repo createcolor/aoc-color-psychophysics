@@ -25,11 +25,13 @@ import json
 import re
 from pathlib import Path
 
+# common before colour: it silences colour's matplotlib warning
+from common import DATA, NOMINAL, OUT, converter
+
 import numpy as np
 from colour.difference import delta_E_CIE2000
 
 from ao.spectral_converter import xyY_to_XYZ
-from common import DATA, NOMINAL, OUT, converter
 
 WHITE_Y = 295.0
 

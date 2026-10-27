@@ -28,11 +28,12 @@ from __future__ import annotations
 
 import json
 
+# common before colour: it silences colour's matplotlib warning
+from common import CENTERS, DATA, OUT
+
 import numpy as np
 from colour import CCS_ILLUMINANTS, XYZ_to_Lab, xyY_to_XYZ
 from colour.difference import delta_E_CIE2000
-
-from common import CENTERS, DATA, OUT
 
 CAMPAIGN = DATA / "validation_campaign_2026-10-17.json"
 D50 = CCS_ILLUMINANTS["CIE 1964 10 Degree Standard Observer"]["D50"]

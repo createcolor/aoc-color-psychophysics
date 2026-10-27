@@ -6,3 +6,6 @@ pandas==2.3.3
 colour-science==0.4.7
 # downloads the Asano (2016) observers on the first run (Zenodo record 3252742)
 colour-datasets==0.2.7
+# colour-datasets imports setuptools.archive_util without declaring it, and
+# venvs on Python 3.12+ no longer bundle setuptools
+setuptools>=70
