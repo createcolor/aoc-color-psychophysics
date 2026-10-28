@@ -41,19 +41,25 @@ sel = {c: load(f"standard_anchor_selection/{c}.json") for c in CENTERS}
 blue_k3 = [r for r in load("ring_step_selection/blue_k3.json")["rows"] if "J_ring" in r]
 obs = {c: {"mean": gate[c]["adopted"]["test_mean"], "worst": gate[c]["adopted"]["test_worst"]} for c in CENTERS}
 
-say("1. Validation: set color differences are reproduced in alternation (2026-10-17 campaign, dE00)")
-say(f"   commanded separations {span(val['commanded_separation_range'])}, "
-    f"{span([val[c]['readings_per_pair'] for c in CENTERS], 'd')} readings per pair, 14 blocks over 54 h")
-say(f"   {'':7s} {'primaries':12s} {'error at center':>16s} {'pair error':>13s} {'per pair mean/max':>18s}")
+aoc, dsp = val["colorimeter"], val["display"]
+say("1. Validation: set color differences are reproduced in alternation (dE00)")
+say(f"   colorimeter (2026-10-17): commanded separations {span(aoc['commanded_separation_range'])}, "
+    f"{span([aoc[c]['readings_per_pair'] for c in CENTERS], 'd')} readings per pair, 14 blocks over 54 h; "
+    f"display (2026-10-28): {dsp['gray']['readings_per_pair']} readings per pair, two cycles of about 1 h")
+say(f"   {'':7s} {'primaries':12s} {'error at center':>24s} {'pair error':>24s} {'per pair mean/max':>18s}")
+say(f"   {'':7s} {'':12s} {'colorimeter':>12s} {'display':>11s} {'colorimeter':>12s} {'display':>11s}")
 for c in CENTERS:
-    r = val[c]
+    r, s = aoc[c], dsp[c]
     say(f"   {c.capitalize():7s} {primaries(int(w) for w in r['primaries_nm']):12s} "
-        f"{r['center_mean']:9.2f} ± {r['center_sd']:.2f} {r['pair_mean']:6.2f} ± {r['pair_sd']:.2f} "
-        f"{r['per_pair_mean']:12.2f}/{r['per_pair_max']:.2f}")
-say(f"   largest single-reading pair error {max(val[c]['pair_max'] for c in CENTERS):.2f}; "
-    f"block means of the center error spread {span([val[c]['center_block_spread'] for c in CENTERS])} "
-    f"(linear trend {span([val[c]['center_block_trend'] for c in CENTERS])}), "
-    f"of the pair error {span([val[c]['pair_block_spread'] for c in CENTERS])}")
+        f"{r['center_mean']:5.2f} ± {r['center_sd']:.2f} {s['center_mean']:5.2f} ± {s['center_sd']:.2f} "
+        f"{r['pair_mean']:5.2f} ± {r['pair_sd']:.2f} {s['pair_mean']:5.2f} ± {s['pair_sd']:.2f} "
+        f"{r['per_pair_mean']:9.2f}/{r['per_pair_max']:.2f}")
+say(f"   {'Mean':7s} {'':12s} {aoc['mean_center']:5.2f} {dsp['mean_center']:12.2f} "
+    f"{aoc['mean_pair']:12.2f} {dsp['mean_pair']:12.2f}")
+say(f"   colorimeter: largest single-reading pair error {max(aoc[c]['pair_max'] for c in CENTERS):.2f}; "
+    f"block means of the center error spread {span([aoc[c]['center_block_spread'] for c in CENTERS])} "
+    f"(linear trend {span([aoc[c]['center_block_trend'] for c in CENTERS])}), "
+    f"of the pair error {span([aoc[c]['pair_block_spread'] for c in CENTERS])}")
 
 say("\n2. Primaries for color matching: the resolution criterion (CIE 1964 residual / minimal step, dE00)")
 for c in CENTERS:
@@ -97,4 +103,4 @@ say("   cost over the in-sample optimum: " + ", ".join(f"{c} {xval[c]['gap']:.2f
 
 text = "\n".join(lines)
 print(text)
-(OUT / "summary.txt").write_text(text + "\n")
+(OUT / "summary.txt").write_text(text + "\n", encoding="utf-8")

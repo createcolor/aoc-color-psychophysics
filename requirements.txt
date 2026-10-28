@@ -1,5 +1,6 @@
-# Python 3.12. The versions the results were produced with; later patch
-# releases of the same minor versions are expected to work.
+# Python 3.12 or 3.13 (Linux, macOS, Windows). The versions the results were
+# produced with; later patch releases of the same minor versions are expected
+# to work.
 numpy==2.4.1
 scipy==1.17.0
 pandas==2.3.3

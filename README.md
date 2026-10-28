@@ -6,19 +6,24 @@ the choice of its primaries for color-matching and color-difference
 experiments, computed from the instrument's calibration and measurements.
 
 ```
-python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
-./run_all.sh
+python -m venv venv
+. venv/bin/activate            # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python run_all.py
 ```
 
-`run_all.sh` runs every step and ends with `scripts/summary.py`, which prints
-the results below (also saved to `output/summary.txt`). The selection runs are
-independent single-threaded processes, run six at a time (`JOBS=n ./run_all.sh`
-to change): about 16 minutes on 8 cores. The first run downloads the
-individual-observer data (Asano et al. 2016, Zenodo record 3252742, about
-7 MB) and caches it in `data/`; after that everything runs offline.
+Python 3.12 or 3.13 on Linux, macOS or Windows. `run_all.py` runs every step
+and ends with `scripts/summary.py`, which prints the results below (also saved
+to `output/summary.txt`). The selection runs are independent single-threaded
+processes, run six at a time (`--jobs n` to change): about 16 minutes on
+8 cores. The first run downloads the individual-observer data (Asano et al.
+2016, Zenodo record 3252742, about 7 MB) and caches it in `data/`; after that
+everything runs offline.
 
 Each step can also be run on its own from this directory, with
-`PYTHONPATH=.:scripts python scripts/<script> ...`; it writes to `output/`.
+`PYTHONPATH=.:scripts python scripts/<script> ...` (on Windows
+`set PYTHONPATH=.;scripts`, then `python scripts\<script> ...`); it writes to
+`output/`.
 
 ## Results
 
@@ -26,12 +31,18 @@ Each step can also be run on its own from this directory, with
 
 At each of the five CIE color centers the AOC alternated the center with a
 test color displaced by a set step (0.5 to 2.5 ΔE₀₀, 8 directions, 40 pairs),
-measured in 14 blocks over a 54-hour campaign. The commanded separations
+measured in 14 blocks over a 54-hour experiment. The commanded separations
 (0.37 to 3.65 ΔE₀₀) are reproduced with a mean absolute error of 0.08 to
 0.12 ΔE₀₀, and the centers within 0.41 to 0.88 ΔE₀₀ of their targets. Block
-means of the pair error vary by only 0.01 to 0.07 ΔE₀₀ over the campaign.
+means of the pair error vary by only 0.01 to 0.07 ΔE₀₀ over the experiment.
+The reference display, measured with the same protocol (two cycles of about an
+hour per center, its model including the measured black level), reproduces
+the pairs within 0.05 to 0.09 ΔE₀₀ and the centers within 0.18 to 0.81 ΔE₀₀:
+on average the two devices are level at the centers (0.60 against 0.63) and
+the display is slightly closer on the pairs (0.08 against 0.10).
 
-`validation.py` — from `data/validation_campaign_2026-10-17.json`.
+`validation.py` — from `data/validation_experiment_2026-10-17.json` and
+`data/display_validation_2026-10-28.json`.
 
 ### 2. Primaries for color matching: the resolution criterion
 
@@ -89,7 +100,8 @@ should be repeated for the population an experiment serves.
 |---|---|
 | `ao/` | The instrument's device model: calibration tables, spectral model, drive solver. Nothing here talks to hardware. |
 | `ao/calibration/2026-10-14/` | The calibration: per-channel amplitude–intensity tables (`amplitude_intensity_calibration_ch*.csv`) and the X-Rite i1 Pro 2 spectrum of every band at every drive level (`wv_intens_spectra_ch*`, pickled tables). |
-| `data/validation_campaign_2026-10-17.json` | The 54-hour validation campaign: for every pair of the protocol, the commanded test color and every reading of the measured center and test color (xyY), with the center error recorded by the control software. |
+| `data/validation_experiment_2026-10-17.json` | The 54-hour validation experiment: for every pair of the protocol, the commanded test color and every reading of the measured center and test color (xyY), with the center error recorded by the control software. |
+| `data/display_validation_2026-10-28.json` | The same protocol on the reference display (two cycles of about an hour per center), with the display model used: primary matrix and measured black level. |
 | `data/monitor_2026-08-28.txt` | X-Rite spectra of the reference display (EIZO CG245W) at the five color centers: the display-derived targets and the display baseline. |
 | `data/eizo_primaries/` | Argyll `.sp` spectra of the display's three primaries (the display model). |
 | `data/asano2015_color_normal_observers_XYZ10.npz` | Written on the first run: the 151 color-normal observers of Asano, Fairchild & Blondé (2016), 10° color-matching functions with ages, from Zenodo record 3252742 (the record links to the spreadsheets on rit-mcsl.org). |

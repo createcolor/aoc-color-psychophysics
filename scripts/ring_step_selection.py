@@ -29,8 +29,9 @@ from itertools import combinations
 import numpy as np
 from numpy.linalg import LinAlgError
 
-from ao.spectral_converter import XYZ_to_xyY, xyY_to_XYZ, TableBounds
+# common before ao: it silences colour's matplotlib warning
 from common import CAL, CENTERS, MIN_SEPARATION_NM, NOMINAL, OUT, RING_DE, converter, primaries_of, ring
+from ao.spectral_converter import XYZ_to_xyY, xyY_to_XYZ, TableBounds
 
 
 def main() -> None:
